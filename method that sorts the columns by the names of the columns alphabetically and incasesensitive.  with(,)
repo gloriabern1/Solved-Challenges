@@ -1,0 +1,45 @@
+  public static string SortCsvColumns(string csv_data)
+        {
+            DataTable dt = new DataTable();
+
+            string[] tableData = csv_data.Split("\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            var col = from cl in tableData[0].Split(",".ToCharArray())
+                      select new DataColumn(cl);
+            dt.Columns.AddRange(col.ToArray());
+
+            (from st in tableData.Skip(1)
+             select dt.Rows.Add(st.Split(",".ToCharArray()))).ToList();
+
+            DataTable dataTable = new DataTable();
+            var colsa = col.OrderBy(x => x.ColumnName).ToArray();
+            dataTable.Columns.AddRange(colsa);
+
+            for (var i = 0; i < dt.Rows.Count; i++)
+            {
+                DataRow row = dataTable.NewRow();
+
+                for (var j = 0; j < dataTable.Columns.Count; j++)
+                {
+                    int index = dt.Columns.IndexOf(dataTable.Columns[j].ColumnName);
+                    row[j] = dt.Rows[i][index];
+                }
+                dataTable.Rows.Add(row);
+            }
+            StringBuilder sb = new StringBuilder();
+
+            IEnumerable<string> columnNames
+                    = dataTable.Columns.Cast<DataColumn>().
+                        Select(column => column.ColumnName);
+            sb.AppendLine(string.Join(",", columnNames));
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                IEnumerable<string> fields
+                    = row.ItemArray.Select(
+                    field => field.ToString());
+                sb.AppendLine(string.Join(",", fields));
+            }
+            sb.ToString().TrimEnd('\r', '\n');
+            //Console.WriteLine( sb.ToString());
+            return sb.ToString();
+        }
