@@ -2,3 +2,13 @@
                 char[] delims = new[] { '\r', '\n' };
                 string[] stringsContent = readString.Split(delims, StringSplitOptions.RemoveEmptyEntries);
                 return stringsContent;
+                
+                
+                
+                //to filter the csv string array
+                
+                  public string[] GetfilteredArray(string[] wordlist, string query)
+        {
+            string[] filteredarray = Array.FindAll(wordlist, x => x.StartsWith(query));
+            return filteredarray;
+        }
