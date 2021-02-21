@@ -1,0 +1,4 @@
+  var readString = await _httpClient.GetStringAsync("https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt");
+                char[] delims = new[] { '\r', '\n' };
+                string[] stringsContent = readString.Split(delims, StringSplitOptions.RemoveEmptyEntries);
+                return stringsContent;
