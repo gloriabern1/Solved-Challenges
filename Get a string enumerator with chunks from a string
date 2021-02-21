@@ -1,0 +1,28 @@
+  public static IEnumerable<string> ChunkIter(string s, int chunks)
+        {
+            int numberofElementInChunks = s.Length / chunks;
+            int remainingElements = s.Length % chunks;
+            if (s == null)
+                throw new ArgumentNullException("s");
+
+            if (chunks < 1)
+                throw new ArgumentOutOfRangeException("chunks");
+            if (s.Length < chunks) chunks = s.Length;
+
+            if (s.Length == 0)
+                yield break;
+            var start = 0;
+            for (var i = 0; i < chunks; i++)
+            {
+                if (i == remainingElements && remainingElements != 0)
+                    numberofElementInChunks--;
+
+                if (remainingElements != 0 && i != remainingElements && i == 0)
+                    numberofElementInChunks++;
+
+                var output = s.Substring(start, numberofElementInChunks);
+                start += numberofElementInChunks;
+                yield return output;
+
+            }
+        }
